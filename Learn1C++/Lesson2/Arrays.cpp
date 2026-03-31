@@ -2,15 +2,13 @@
 using namespace std;
 
 int main() {
-    int min, now;
+    int summ, now;
     cin >> now;
-    min = now;
+    summ = 0;
     while (now != 0){
-        if (now < min){
-            min = now;
+            summ = summ + now;
+            cin >> now;
         }
-        cin >> now;
-    }
-    cout << min;
+    cout << summ;
     return 0;
 }
