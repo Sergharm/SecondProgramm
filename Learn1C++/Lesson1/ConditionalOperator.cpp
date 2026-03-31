@@ -2,13 +2,23 @@
 using namespace std;
 
 int main(){
-    int a;
-    cin >> a;
-    if (a > 0){
-        cout << a;
+    int eyes, legs;
+    cin >> eyes >> legs;
+    if ( eyes >= 8){
+        if (legs == 8){
+            cout << "spider";
+        }
+        else{
+            cout << "scallop";
+        }
     }
     else{
-        cout << -a;
+        if (legs == 4 && eyes == 2){
+            cout << "cat";
+        }
+        else{
+            cout << "bug";
+        }
     }
     return 0;
 }
