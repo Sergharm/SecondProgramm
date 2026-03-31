@@ -7,7 +7,7 @@ int main() {
     summ = 0;
     while (now != 0){
             summ = summ + now;
-            cin >> now;
+            cin >> now; // емда 
         }
     cout << summ;
     return 0;
