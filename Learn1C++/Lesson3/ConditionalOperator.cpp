@@ -2,19 +2,12 @@
 using namespace std;
 
 int main(){
-    int a, b, c, d;
-    cin >> a >> b >> c >> d;
-    if((a == c) && (((b - 1) == d) || ((b + 1 ) == d) || (b == d))){
-        cout << "YES";
+    int a;
+    int b = 2;
+    cin >> a;
+    while((a % b) != 0){
+        b += 1;
     }
-    else if((b == d) && (((a -1) == c) || ((a + 1) == c) || (a == c))){
-        cout << "YES";
-    }
-    else if ((((a + 1) == c) && (b + 1) == d) || (((a - 1) == c) && ((b + 1) == d)) || ((((a + 1) == c) && ((b - 1) == d))) || ((((a - 1) == c) && (b + 1) == d))){
-        cout << "YES";
-    }
-    else{
-        cout << "NO";
-    }
+    cout << b;
     return 0;  
 }
