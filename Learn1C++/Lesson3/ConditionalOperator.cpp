@@ -2,16 +2,14 @@
 using namespace std;
 
 int main(){
-    int a, b, c;
-    cin >> a >> b >> c;
-    if ((a >= b) && (a >= c)){
-        cout << a;
+    int A, B, C;
+    cin >> A >> B >> C;
+    if(A < (B + C) && (B < (C + A) && (C < (B + A)))){
+        cout << "YES";
     }
-    if ((b > a) && (b >= c)){
-        cout << b;
-    }
-    if ((c > a) && (c > b)){
-        cout << c;
+    
+    else{
+        cout << "NO";
     }
     return 0;
 }
