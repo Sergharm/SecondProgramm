@@ -1,13 +1,21 @@
 #include <iostream>
+#include <cmath>
+#include <vector> 
+
 using namespace std;
 
-int main(){
-    int a;
-    int b = 2;
-    cin >> a;
-    while((a % b) != 0){
-        b += 1;
+vector<int> VectortoString(vector<int>& M1){
+    int value;
+    while (cin >> value) {
+      M1.push_back(value);
     }
-    cout << b;
-    return 0;  
+    return M1;
+}
+int main(){
+    vector <int> a;
+    VectortoString(a);
+    for (int value: a){
+        cout << value << " ";
+    }
+    return 0;
 }
