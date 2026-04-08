@@ -21,7 +21,7 @@ int safeInput(const string& message) {
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cout << "Ошибка! Нужно ввести ЧИСЛО. Попробуйте ещё раз!" << endl;
-        } else {
+        } else {    
             cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
             return value;
         }
