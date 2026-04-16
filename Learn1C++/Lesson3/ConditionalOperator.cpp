@@ -1,3 +1,4 @@
+// вывод вектора
 #include <iostream>
 #include <cmath>
 #include <vector> 
