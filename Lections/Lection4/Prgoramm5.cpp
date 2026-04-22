@@ -4,6 +4,7 @@ using namespace std;
 
 int mod( int base, int power, int modulo){
     base %= modulo;
+    power %= modulo - 1;
 
     int result = 1;
     for (int i = 0; i < power; ++i){
@@ -15,6 +16,6 @@ int mod( int base, int power, int modulo){
 }
 
 int main(){
-    cout << mod(2, 2025, 5) << endl;
+    cout << mod(2, 5432675, 13) << endl;
     return 0;
 }
