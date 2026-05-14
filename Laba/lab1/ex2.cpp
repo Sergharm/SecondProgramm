@@ -2,9 +2,11 @@
 #include <map>
 #include <string>
 #include <utility>
+#include <locale>
 using namespace std; // Объявление использования пространства имён std
 int main()
 {
+     setlocale(LC_ALL, "ru_RU.UTF-8");
     map<char, int> romeNumbers = // Контейнер для хранения базовых римских цифр
     {
         {'I', 1}, {'V', 5},

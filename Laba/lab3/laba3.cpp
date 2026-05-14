@@ -11,23 +11,19 @@
 
 using namespace std;
 
-// Функция для решета Эратосфена - находит простые числа до limit
 vector<int> get_primes(int limit) {
     vector<bool> is_prime(limit + 1, true);
     is_prime[0] = false;
     is_prime[1] = false;
     
-    // Основной цикл решета
     for (int i = 2; i * i <= limit; i++) {
         if (is_prime[i]) {
-            // Вычеркиваем кратные числа
             for (int j = i * i; j <= limit; j += i) {
                 is_prime[j] = false;
             }
         }
     }
-    
-    // Собираем простые числа в вектор
+
     vector<int> result;
     for (int i = 2; i <= limit; i++) {
         if (is_prime[i]) {
@@ -37,33 +33,29 @@ vector<int> get_primes(int limit) {
     return result;
 }
 
-// Быстрое возведение в степень по модулю
-// Возвращает (a^power) % mod
 uint64_t mod_pow(uint64_t a, uint64_t power, uint64_t mod) {
     uint64_t res = 1;
     a = a % mod;
     
     while (power > 0) {
-        // Если степень нечётная
+
         if (power % 2 == 1) {
             res = (res * a) % mod;
         }
-        // Увеличиваем основание в квадрате
         a = (a * a) % mod;
         power = power / 2;
     }
     return res;
 }
 
-// Проверка числа на простоту по теореме Демитко
 bool check_prime_gost(uint64_t p, uint64_t exp) {
     // Проверяем два условия из ГОСТ
     if (mod_pow(2, p - 1, p) == 1) {
         if (mod_pow(2, exp, p) != 1) {
-            return true;  // Число простое
+            return true;  
         }
     }
-    return false;  // Не прошло проверку
+    return false; 
 }
 
 // Генерация пары простых чисел (q, p)
