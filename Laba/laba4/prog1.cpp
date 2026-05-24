@@ -66,7 +66,7 @@ void newtonMethod(double x0, double eps) {
         if (diff < eps) break;
     }
     
-    cout << "N     xn          xn+1        |xn+1-xn|" << endl;
+    cout << "N     xn           xn+1        |xn+1-xn|" << endl;
     for (size_t i = 0; i < xnVec.size(); ++i) {
         cout << fixed << setprecision(6);
         cout << i << "     " << xnVec[i] << "    " << xnextVec[i] << "    " << diffVec[i] << endl;
@@ -93,7 +93,7 @@ void simpleIterationMethod(double x0, double eps, bool usePlus) {
     
     cout << "N     xn          xn+1        |xn+1-xn|" << endl;
     for (size_t i = 0; i < xnVec.size(); ++i) {
-        cout << fixed << setprecision(6);
+        cout << fixed << setprecision(6);   
         cout << i << "     " << xnVec[i] << "    " << xnextVec[i] << "    " << diffVec[i] << endl;
     }
     cout << "Корень: " << x << endl << endl;

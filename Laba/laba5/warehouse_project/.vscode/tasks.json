@@ -1,0 +1,44 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "g++ build active file",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+    "-std=c++17",
+    "-finput-charset=UTF-8",
+    "-fexec-charset=CP1251",
+    "-g",
+    "${workspaceFolder}\\*.cpp", 
+    "-o",
+    "${workspaceFolder}\\warehouse.exe"
+],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Compiled with MinGW g++"
+        },
+        {
+            "label": "clean",
+            "type": "shell",
+            "command": "del",
+            "args": ["warehouse.exe"],
+            "problemMatcher": [],
+            "windows": {
+                "command": "del",
+                "args": ["warehouse.exe"]
+            },
+            "linux": {
+                "command": "rm",
+                "args": ["-f", "warehouse"]
+            },
+            "osx": {
+                "command": "rm",
+                "args": ["-f", "warehouse"]
+            }
+        }
+    ]
+}
