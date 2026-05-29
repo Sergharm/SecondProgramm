@@ -40,6 +40,10 @@ int main() {
             string prod, addr; 
             int qty;
             if (iss >> prod >> qty >> addr) {
+                if (qty < 0){
+                cout << "Ошибка. Нужно использовать положительное число" << endl;
+                return 1;
+            }
                 addProduct(warehouse, prod, qty, addr);
             } else {
                 cout << "Ошибка: ADD <товар> <кол-во> <адрес>" << endl;
@@ -49,6 +53,10 @@ int main() {
             string prod, addr; 
             int qty;
             if (iss >> prod >> qty >> addr) {
+                if (qty < 0){
+                cout << "Ошибка. Нужно использовать положительное число" << endl;
+                return 1;
+            }
                 removeProduct(warehouse, prod, qty, addr);
             } else {
                 cout << "Ошибка: REMOVE <товар> <кол-во> <адрес>" << endl;

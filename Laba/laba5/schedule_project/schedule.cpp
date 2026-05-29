@@ -49,19 +49,20 @@ void ScheduleManager::nextMonth() {
     
     cout << "Переход на следующий месяц" << endl;
     
-    int lastDay = daysInMonth.at(prevMonth);
-    map<int, vector<string>> prevData = schedule[prevMonth];
+    // ИСПРАВЛЕНИЕ: получаем количество дней в НОВОМ месяце
+    int newMonthLastDay = daysInMonth.at(currentMonth);
     
+    map<int, vector<string>> prevData = schedule[prevMonth];
     schedule[currentMonth].clear();
     
-    // Исправленный цикл без structured bindings
     for (const auto& pair : prevData) {
         int day = pair.first;
         const vector<string>& disciplines = pair.second;
         
         int newDay = day;
-        if (day > lastDay) {
-            newDay = lastDay;
+        // Если день не существует в НОВОМ месяце — переносим на его последний день
+        if (day > newMonthLastDay) {
+            newDay = newMonthLastDay;
         }
         
         auto& targetDay = schedule[currentMonth][newDay];
@@ -75,7 +76,8 @@ void ScheduleManager::viewDay(int day) const {
     int days = getDaysInCurrentMonth();
     
     if (day < 1 || day > days) {
-        cout << "Ошибка: В этом месяце всего " << days << " дней" << endl;
+        cout << "Ошибка: В этом месяце всего " << days << " дней. Добавим занятие на последний день" << endl;
+        day = days;
         return;
     }
     

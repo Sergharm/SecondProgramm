@@ -27,6 +27,9 @@ int main() {
     cout << "Введите количество окон:" << endl;
     cout << ">>> ";
     cin >> windowCount;
+    if (windowCount <= 0){
+        return 1;
+    }
     
     cin.ignore();
     
