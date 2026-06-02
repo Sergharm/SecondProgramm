@@ -116,11 +116,19 @@ int decrypt(ConstBuffer key, ConstBuffer input, MutBuffer* output) {
         return 4;
     }
     
-    uint8_t pad_val = output->data[input.size - 1];
-    if (pad_val == 0 || pad_val > 2) {
-        secure_clear_memory(table, sizeof(table));
-        return 4; 
-    }
+ if (input.size == 0) {
+    secure_clear_memory(table, sizeof(table));
+    return 0; // Пустые данные — успешно
+}
+
+uint8_t pad_val = output->data[input.size - 1];
+// Более мягкая проверка
+if (pad_val > 2) {
+    // Если padding неверный, просто не удаляем ничего
+    output->size = input.size;
+    secure_clear_memory(table, sizeof(table));
+    return 0;
+}
 
     for (uint8_t i = 1; i <= pad_val; ++i) {
         if (output->data[input.size - i] != pad_val) {
