@@ -17,7 +17,6 @@ int main() {
     SetConsoleCP(65001);
 #endif
 
-    cout << "AES-128 CBC ШИФРОВАНИЕ" << endl;
 
     // Генерация ключа и IV
     vector<uint8_t> key = generateRandomBytes(AES_KEY_SIZE);

@@ -49,7 +49,6 @@ void ScheduleManager::nextMonth() {
     
     cout << "Переход на следующий месяц" << endl;
     
-    // ИСПРАВЛЕНИЕ: получаем количество дней в НОВОМ месяце
     int newMonthLastDay = daysInMonth.at(currentMonth);
     
     map<int, vector<string>> prevData = schedule[prevMonth];
