@@ -6,6 +6,7 @@
 #include <clocale>
 #include <limits>
 #include <vector>
+#include <filesystem>
 
 void UserInterface::show_menu() {
     std::cout << "Меню:\n";
@@ -22,14 +23,23 @@ void UserInterface::process_text(bool is_encrypt) {
     std::cout << "Алгоритм (affine/playfair): ";
     std::cin >> algo;
     
+    if (algo.empty()) {
+        std::cerr << "Ошибка: алгоритм не указан\n";
+        return;
+    }
+    
     try {
         LibraryLoader loader(algo);
         auto info = loader.get_info();
         
         std::cout << "Размер ключа: " << info->key_size << " байт\n";
-        std::cout << "Ключ (hex): ";
         std::string key_hex;
-        std::cin >> key_hex;
+        while (true) {
+            std::cout << "Ключ (hex): ";
+            std::cin >> key_hex;
+            if (key_hex.length() == info->key_size * 2) break;
+            std::cout << "Ошибка: требуется " << info->key_size * 2 << " символов\n";
+        }
         
         std::vector<uint8_t> key(info->key_size);
         for (size_t i = 0; i < info->key_size; ++i) {
@@ -52,6 +62,8 @@ void UserInterface::process_text(bool is_encrypt) {
         if (status == 0) {
             std::string result(output.begin(), output.end());
             std::cout << "Результат: " << result << "\n";
+        } else {
+            std::cerr << "Ошибка шифрования: код " << status << "\n";
         }
     } catch (const std::exception& e) {
         std::cerr << "Ошибка: " << e.what() << "\n";
@@ -64,6 +76,12 @@ void UserInterface::process_file(bool is_encrypt) {
     std::cin >> algo;
     std::cout << "Входной файл: ";
     std::cin >> in_path;
+    
+    if (!std::filesystem::exists(in_path)) {
+        std::cerr << "Ошибка: файл не найден\n";
+        return;
+    }
+    
     std::cout << "Выходной файл: ";
     std::cin >> out_path;
     
@@ -115,6 +133,12 @@ void UserInterface::run() {
         show_menu();
         std::cout << "Выбор: ";
         std::cin >> choice;
+        
+        if (std::cin.fail()) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            continue;
+        }
         
         switch(choice) {
             case 1: process_text(true); break;
