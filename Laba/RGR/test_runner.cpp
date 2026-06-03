@@ -27,7 +27,7 @@ typedef size_t (*GetOutputSizeFunc)(size_t, int);
 typedef int (*CryptoFunc)(ConstBuffer, ConstBuffer, MutBuffer*);
 
 bool run_test(const char* lib_name, const std::vector<uint8_t>& plain, const std::vector<uint8_t>& key) {
-    std::string filename = std::string(LIB_PREFIX) + lib_name + LIB_EXT;
+    std::string filename = "./" + std::string(LIB_PREFIX) + lib_name + LIB_EXT;
     LIB_HANDLE handle = LOAD_LIB(filename.c_str());
     if (!handle) {
         std::cerr << "[FAIL] Could not load " << filename << "\n";
