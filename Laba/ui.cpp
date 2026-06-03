@@ -1,5 +1,6 @@
 #include "ui.h"
 #include "library_loader.h"
+#include "file_processor.h"
 #include <iostream>
 #include <clocale>
 #include <limits>
@@ -56,6 +57,37 @@ void UserInterface::process_text(bool is_encrypt) {
     }
 }
 
+void UserInterface::process_file(bool is_encrypt) {
+    std::string algo, in_path, out_path;
+    std::cout << "Алгоритм: ";
+    std::cin >> algo;
+    std::cout << "Входной файл: ";
+    std::cin >> in_path;
+    std::cout << "Выходной файл: ";
+    std::cin >> out_path;
+    
+    try {
+        LibraryLoader loader(algo);
+        auto info = loader.get_info();
+        
+        std::vector<uint8_t> key(info->key_size, 0x00);
+        std::vector<uint8_t> input = FileProcessor::read_file(in_path);
+        std::vector<uint8_t> output(input.size());
+        
+        ConstBuffer k{key.data(), key.size()};
+        ConstBuffer in{input.data(), input.size()};
+        MutBuffer out{output.data(), output.size()};
+        
+        int status = loader.execute_crypto(is_encrypt, k, in, &out);
+        if (status == 0) {
+            FileProcessor::write_file(out_path, output);
+            std::cout << "Готово: " << out_path << "\n";
+        }
+    } catch (const std::exception& e) {
+        std::cerr << "Ошибка: " << e.what() << "\n";
+    }
+}
+
 void UserInterface::run() {
     setlocale(LC_ALL, "ru_RU.UTF-8");
     int choice;
@@ -67,9 +99,10 @@ void UserInterface::run() {
         switch(choice) {
             case 1: process_text(true); break;
             case 2: process_text(false); break;
+            case 3: process_file(true); break;
+            case 4: process_file(false); break;
         }
     } while (choice != 0);
 }
 
-void UserInterface::process_file(bool is_encrypt) {}
 void UserInterface::generate_key() {}
