@@ -1,6 +1,7 @@
 #include "ui.h"
 #include "library_loader.h"
 #include "file_processor.h"
+#include "key_generator.h"
 #include <iostream>
 #include <clocale>
 #include <limits>
@@ -88,6 +89,25 @@ void UserInterface::process_file(bool is_encrypt) {
     }
 }
 
+void UserInterface::generate_key() {
+    std::string algo, path;
+    std::cout << "Алгоритм: ";
+    std::cin >> algo;
+    std::cout << "Сохранить в: ";
+    std::cin >> path;
+    
+    try {
+        LibraryLoader loader(algo);
+        auto info = loader.get_info();
+        
+        auto key = KeyGenerator::generate_key(info->key_size);
+        FileProcessor::write_file(path, key);
+        std::cout << "Ключ создан: " << path << " (" << key.size() << " байт)\n";
+    } catch (const std::exception& e) {
+        std::cerr << "Ошибка: " << e.what() << "\n";
+    }
+}
+
 void UserInterface::run() {
     setlocale(LC_ALL, "ru_RU.UTF-8");
     int choice;
@@ -101,8 +121,7 @@ void UserInterface::run() {
             case 2: process_text(false); break;
             case 3: process_file(true); break;
             case 4: process_file(false); break;
+            case 5: generate_key(); break;
         }
     } while (choice != 0);
 }
-
-void UserInterface::generate_key() {}
