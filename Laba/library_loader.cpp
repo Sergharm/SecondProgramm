@@ -19,8 +19,9 @@ LibraryLoader::LibraryLoader(const std::string& algo_name) {
     info_fn_ = (GetAlgoInfoFunc)GET_FUNC(handle_, "get_algorithm_info");
     size_fn_ = (GetOutputSizeFunc)GET_FUNC(handle_, "get_output_size");
     crypto_fn_ = (CryptoFunc)GET_FUNC(handle_, "encrypt");
+    validate_fn_ = (ValidateKeyFunc)GET_FUNC(handle_, "validate_key");
     
-    if (!info_fn_ || !size_fn_ || !crypto_fn_) {
+    if (!info_fn_ || !size_fn_ || !crypto_fn_ || !validate_fn_) {
         CLOSE_LIB(handle_);
         throw std::runtime_error("Invalid library interface");
     }
@@ -43,4 +44,8 @@ int LibraryLoader::execute_crypto(bool is_encrypt, ConstBuffer key,
     CryptoFunc fn = is_encrypt ? crypto_fn_ : 
                      (CryptoFunc)GET_FUNC(handle_, "decrypt");
     return fn ? fn(key, input, output) : -1;
+}
+
+int LibraryLoader::validate_key(ConstBuffer key) const {
+    return validate_fn_(key);
 }
