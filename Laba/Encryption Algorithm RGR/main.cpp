@@ -8,7 +8,6 @@ using namespace std;
 int main() {
     try {
         setlocale(LC_ALL, "ru_RU.UTF-8"); 
-        
         UserInterface ui;
         ui.run();
         return 0;

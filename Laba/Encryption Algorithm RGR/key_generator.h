@@ -1,6 +1,6 @@
 #ifndef KEY_GENERATOR_H
 #define KEY_GENERATOR_H
-
+#include <cstddef> // Подключает size_t
 #include <vector>
 #include <cstdint>
 

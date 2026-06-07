@@ -5,7 +5,7 @@
 using namespace std;
 
 #if defined(_WIN32) || defined(_WIN64)
-    #define LIB_PREFIX ""
+    #define LIB_PREFIX "lib"
     #define LIB_EXT ".dll"
     #define LOAD_LIB(name) LoadLibraryA(name)
     #define GET_FUNC(h, name) GetProcAddress(h, name)
