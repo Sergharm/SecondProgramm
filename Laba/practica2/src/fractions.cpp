@@ -6,7 +6,6 @@
 
 using namespace std;
 
-// Решение диофантова уравнения 1256a + 847b = 119 (Вариант 3)
 void solveDiophantineVariant3() {
     cout << "\n=== Диофантово уравнение ===\n";
     cout << "Уравнение: 1256a + 847b = 119\n\n";

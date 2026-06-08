@@ -37,4 +37,8 @@ else
 	-$(RM) $(OBJS) $(TARGET_APP)
 endif
 
+<<<<<<< HEAD
 .PHONY: all clean
+=======
+.PHONY: all clean
+>>>>>>> d6e8ed2 (Изменения во второй практике)

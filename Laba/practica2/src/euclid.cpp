@@ -1,4 +1,3 @@
-// src/euclid.cpp
 #include "../include/euclid.h"
 #include <iostream>
 #include <cstdint> 
