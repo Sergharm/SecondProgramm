@@ -3,7 +3,8 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**"
+            "${workspaceFolder}/**",
+            "${workspaceFolder}/Laba/practica2/include"
             ],
             "defines": [],
             "compilerPath": "C:/MinGW/bin/g++.exe",
