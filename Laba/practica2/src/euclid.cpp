@@ -1,21 +1,23 @@
-#include "euclid.h"
+// src/euclid.cpp
+#include "../include/euclid.h"
 #include <iostream>
+#include <cstdint> 
 
 using namespace std;
 
-uint extGCD(uint a, uint b, int64 &kofU, int64 &kofV) {
-    int64 u0 = 1, v0 = 0; 
-    int64 u1 = 0, v1 = 1; 
+uint64_t extGCD(uint64_t a, uint64_t b, int64_t &kofU, int64_t &kofV) {
+    int64_t u0 = 1, v0 = 0; 
+    int64_t u1 = 0, v1 = 1; 
     
-    uint shag = 1;
+    uint64_t shag = 1;
     cout << "[Начало цикла Евклида]\n";
 
     while (b != 0) {
-        uint chastnoeQ = a / b; 
-        uint ostatokR = a % b; 
+        uint64_t chastnoeQ = a / b; 
+        uint64_t ostatokR = a % b; 
 
-        int64 nextU = u0 - (int64)chastnoeQ * u1;  // Приводим к int64
-        int64 nextV = v0 - (int64)chastnoeQ * v1;
+        int64_t nextU = u0 - (int64_t)chastnoeQ * u1;
+        int64_t nextV = v0 - (int64_t)chastnoeQ * v1;
 
         cout << "    Шаг " << shag++ << ": " << a << " / " << b 
              << " = " << chastnoeQ << " (остаток " << ostatokR << ")\n";
@@ -38,18 +40,17 @@ uint extGCD(uint a, uint b, int64 &kofU, int64 &kofV) {
     return a; 
 }
 
-uint modInverse(uint chisloC, uint modulM) {
-    int64 kofU, kofV;
+uint64_t modInverse(uint64_t chisloC, uint64_t modulM) {
+    int64_t kofU, kofV;
     cout << "  [Лог] Поиск обратного для " << chisloC << " mod " << modulM << ":\n";
-    uint nod = extGCD(chisloC, modulM, kofU, kofV);
+    uint64_t nod = extGCD(chisloC, modulM, kofU, kofV);
     
     if (nod != 1) {
         cout << "    Ошибка: обратного числа нет, так как НОД = " << nod << "\n";
-        return (uint)(-1);
+        return (uint64_t)(-1);
     }
     
-    // Приводим отрицательный коэффициент к положительному остатку
-    uint resultat = ((kofU % (int64)modulM) + (int64)modulM) % modulM;
+    uint64_t resultat = ((kofU % (int64_t)modulM) + (int64_t)modulM) % modulM;
     cout << "    -> Обратное число найдено: " << resultat << "\n";
     return resultat;
 }

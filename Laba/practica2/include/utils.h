@@ -1,11 +1,11 @@
 #pragma once
+#include <cstdint>
 #include <string>
-
-typedef unsigned long long uint;
 
 void clear_input();
 
-uint get_ll(const std::string& podskazka, uint minZnachenie = 0, uint maxZnachenie = 1000000000000ULL);
+// Значения по умолчанию указываем ТОЛЬКО здесь
+uint64_t get_ll(const std::string& podskazka, uint64_t minZnachenie = 0, uint64_t maxZnachenie = 1000000000000ULL);
 
 std::string get_str(const std::string& podskazka);
 

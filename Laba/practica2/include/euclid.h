@@ -1,10 +1,6 @@
+// include/euclid.h
 #pragma once
+#include <cstdint>
 
-typedef unsigned long long uint;
-typedef long long int64;  // Добавляем знаковый тип
-
-// Расширенный алгоритм Евклида
-uint extGCD(uint a, uint b, int64 &kofU, int64 &kofV);
-
-// Поиск обратного числа по модулю
-uint modInverse(uint chisloC, uint modulM);
+uint64_t extGCD(uint64_t a, uint64_t b, int64_t &kofU, int64_t &kofV);
+uint64_t modInverse(uint64_t chisloC, uint64_t modulM);

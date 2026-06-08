@@ -1,18 +1,13 @@
 #pragma once
+#include <cstdint>
 #include <string>
 
-typedef unsigned long long uint;
-
-// Структура для открытого ключа (то, что можно всем показывать)
 struct ElGamalPublicKey {
-    uint prostoeP;      // простое число (модуль)
-    uint generatorG;    // первообразный корень
-    uint otkritiyY;     // открытый ключ = g^x mod p
+    uint64_t prostoeP;
+    uint64_t generatorG;
+    uint64_t otkritiyY;
 };
 
-// Главное меню Эль-Гамаля
 void runElGamalMenu();
-
-// Функции шифрования и дешифрования файлов
 void encryptFileElGamal(const std::string& fajlIn, const std::string& fajlOut, ElGamalPublicKey pub);
-void decryptFileElGamal(const std::string& fajlIn, const std::string& fajlOut, uint zakritiyX, uint modulP);
+void decryptFileElGamal(const std::string& fajlIn, const std::string& fajlOut, uint64_t zakritiyX, uint64_t modulP);

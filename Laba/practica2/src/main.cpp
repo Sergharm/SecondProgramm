@@ -1,4 +1,5 @@
-#include "menu.h"
+#include "../include/menu.h"
+#include <clocale>
 
 int main() {
     setlocale(LC_ALL, "ru_RU.UTF-8");  // чтобы русский выводился нормально

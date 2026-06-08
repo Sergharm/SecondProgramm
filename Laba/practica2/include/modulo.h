@@ -1,15 +1,14 @@
 #pragma once
+#include <cstdint>
 
-typedef unsigned long long uint;
-
-// Проверка числа на простоту (метод перебора, для лабы хватит)
-bool isPrime(uint chisloN);
+// Проверка числа на простоту
+bool isPrime(uint64_t chisloN);
 
 // Обычный алгоритм Евклида для поиска НОД
-uint gcd(uint a, uint b);
+uint64_t gcd(uint64_t a, uint64_t b);
 
-// Быстрое бинарное возведение в степень по модулю (добавлен переключатель логов)
-uint powerMod(uint baza, uint stepen, uint modul, bool show_log = true);
+// Быстрое бинарное возведение в степень по модулю
+uint64_t powerMod(uint64_t baza, uint64_t stepen, uint64_t modul, bool show_log = true);
 
-// Возведение в степень по теореме Ферма (добавлен переключатель логов)
-uint powerModFermat(uint baza, uint stepen, uint modul, bool show_log = true);
+// Возведение в степень по теореме Ферма
+uint64_t powerModFermat(uint64_t baza, uint64_t stepen, uint64_t modul, bool show_log = true);
