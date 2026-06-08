@@ -1,18 +1,13 @@
-#ifndef MODULO_H
-#define MODULO_H
+#pragma once
 
-using namespace std; // ну а чё, так проще
+// Проверка числа на простоту
+bool isPrime(long long n);
 
-// проверка на простоту, ну типа перебором
-bool is_prime(long long chislo);
+// Обычный алгоритм Евклида для поиска НОД
+long long gcd(long long a, long long b);
 
-// a^x mod p через ферма (если p простое)
-long long fermat_pow(long long a, long long x, long long p);
+// Быстрое бинарное возведение в степень по модулю (добавлен переключатель логов)
+long long powerMod(long long base, long long exp, long long mod, bool show_log = true);
 
-// a^x mod m через двоичное разложение (быстрое)
-long long binary_pow(long long a, long long x, long long m);
-
-// безопасное умножение чтобы не было переполнения
-long long safe_mul(long long a, long long b, long long mod);
-
-#endif
+// Возведение в степень по теореме Ферма (добавлен переключатель логов)
+long long powerModFermat(long long base, long long exp, long long mod, bool show_log = true);

@@ -1,19 +1,7 @@
-#ifndef EUCLID_H
-#define EUCLID_H
+#pragma once
 
-using namespace std;
+// Расширенный алгоритм Евклида без рекурсии
+long long extGCD(long long a, long long b, long long &u, long long &v);
 
-// структура для результатов расширенного евклида
-struct EuclidResult {
-    long long u;
-    long long v;
-    long long gcd;
-};
-
-// расширенный алгоритм евклида
-EuclidResult ext_gcd(long long a, long long b);
-
-// обратное число по модулю
-long long mod_inverse(long long c, long long m);
-
-#endif
+// Поиск обратного числа по модулю
+long long modInverse(long long c, long long m);

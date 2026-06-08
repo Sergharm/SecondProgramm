@@ -17,7 +17,8 @@ LDFLAGS =
 
 TARGET_APP = pr2_crypto$(TARGET_EXT)
 
-SRCS = src/main.cpp src/menu.cpp src/modulo.cpp src/euclid.cpp src/elgamal.cpp src/fractions.cpp
+# ДОБАВЛЕН ФАЙЛ src/utils.cpp В СПИСОК ИСХОДНИКОВ
+SRCS = src/main.cpp src/menu.cpp src/modulo.cpp src/euclid.cpp src/elgamal.cpp src/fractions.cpp src/utils.cpp
 OBJS = $(SRCS:.cpp=.o)
 
 all: $(TARGET_APP)

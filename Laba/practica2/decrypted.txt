@@ -1,0 +1,1 @@
+Hello! Shifrovanie ElGamal dlya Varianta 3.

@@ -1,148 +1,146 @@
 #include "elgamal.h"
 #include "modulo.h"
-#include "euclid.h"
+#include "utils.h"
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
-#include <ctime>
+
 using namespace std;
 
-// генерация случайного числа в диапазоне [min, max] для ключей. 
-long long random_num(long long min_val, long long max_val) {
-    return min_val + rand() % (max_val - min_val + 1);
-}
+void runElGamalMenu() {
+    // Статические переменные для памяти ключей
+    static long long p = 65537; 
+    static long long g = 3;     
+    static long long x = 12345; 
+    static long long y = powerMod(g, x, p, false); 
 
-// генерация ключей эль-гамаля
-Keys gen_keys(long long p, long long g) {
-    cout << "\n Генерация ключей Эль-Гамаля" << endl;
-    
-    if (!is_prime(p)) {
-        cout << "ОШИБКА: p должно быть простым!" << endl;
-        Keys bad; bad.p = 0; bad.g = 0; bad.y = 0; bad.x = 0;
-        return bad;
-    }
-    
-    // закрытый ключ x - случайное число от 1 до p-2
-    long long xaxa = random_num(1, p - 2);
-    cout << "Закрытый ключ x = " << xaxa << " (секретное число от 1 до " << p-2 << ")" << endl;
-    
-    // открытый ключ y = g^x mod p
-    long long ya = binary_pow(g, xaxa, p);
-    cout << "Открытый ключ y = g^x mod p = " << g << "^" << xaxa << " mod " << p << " = " << ya << endl;
-    
-    Keys k;
-    k.p = p;
-    k.g = g;
-    k.y = ya;
-    k.x = xaxa;
-    return k;
-}
-
-// шифрование одного байта
-// на выходе пара (c1, c2)
-void encrypt_byte(unsigned char bukovka, const Keys& pub, long long& c1, long long& c2) {
-    long long k = random_num(1, pub.p - 2);
-    
-    // c1 = g^k mod p
-    c1 = binary_pow(pub.g, k, pub.p);
-    
-    // c2 = (m * y^k) mod p
-    long long yk = binary_pow(pub.y, k, pub.p);
-    c2 = safe_mul((long long)bukovka, yk, pub.p);
-    
-    cout << "  Шифруем байт " << (int)bukovka;
-    if (bukovka >= 32 && bukovka < 127) cout << " ('" << (char)bukovka << "')";
-    cout << " -> c1=" << c1 << ", c2=" << c2 << endl;
-}
-
-// дешифрование одного байта
-// m = c2 * (c1^x)^(-1) mod p
-unsigned char decrypt_byte(long long c1, long long c2, long long x, long long p) {
-    // s = c1^x mod p
-    long long s = binary_pow(c1, x, p);
-    
-    // обратный элемент к s
-    long long s_inv = mod_inverse(s, p);
-    if (s_inv == -1) {
-        cout << "ОШИБКА при дешифровании!" << endl;
-        return 0;
-    }
-    
-    // m = c2 * s^(-1) mod p
-    long long m = safe_mul(c2, s_inv, p);
-    
-    cout << "  Расшифровываем c1=" << c1 << ", c2=" << c2 << " -> байт " << (int)m;
-    if (m >= 32 && m < 127) cout << " ('" << (char)m << "')";
-    cout << endl;
-    
-    return (unsigned char)m;
-}
-
-// шифрование файла
-void encrypt_file(string in_path, string out_path, const Keys& pub) {
-    cout << "\nШифрование файла" << endl;
-    cout << "Вход: " << in_path << endl;
-    cout << "Выход: " << out_path << endl;
-    
-    ifstream fin(in_path, ios::binary);
-    if (!fin) {
-        cout << "ОШИБКА: не могу открыть файл " << in_path << endl;
-        return;
-    }
-    
-    ofstream fout(out_path, ios::binary);
-    if (!fout) {
-        cout << "ОШИБКА: не могу создать файл " << out_path << endl;
-        return;
-    }
-    
-    unsigned char bukovka;
-    int count = 0;
-    while (fin.read((char*)&bukovka, 1)) {
-        long long c1, c2;
-        encrypt_byte(bukovka, pub, c1, c2);
+    int choice = -1;
+    while (choice != 0) {
+        cout << "\n--- Подменю: Криптосистема Эль-Гамаля ---\n";
+        cout << "1. Сгенерировать / Показать ключи\n";
+        cout << "2. Зашифровать файл\n";
+        cout << "3. Расшифровать файл\n";
+        cout << "0. Назад в главное меню\n";
         
-        // записываем пару чисел в бинарный файл
-        // (тут я не до конца понял как это работает, но работает - не трогай)
-        fout.write((char*)&c1, sizeof(c1));
-        fout.write((char*)&c2, sizeof(c2));
-        count++;
+        choice = static_cast<int>(get_ll("Выберите действие: ", 0, 3));
+
+        if (choice == 1) {
+            cout << "\n[Генерация ключей]\n";
+            p = get_ll("Введите простое число p (рекомендуется > 15, например 257 или 65537): ", 2);
+            g = get_ll("Введите первообразный корень g: ", 2);
+            x = get_ll("Введите ваш секретный ключ x (x < p): ", 1, p - 1);
+            
+            y = powerMod(g, x, p, false);
+
+            cout << "\n[Ключи успешно обновлены]:\n";
+            cout << "  Открытый ключ: (p = " << p << ", g = " << g << ", y = " << y << ")\n";
+            cout << "  Закрытый ключ: (x = " << x << ")\n";
+        }
+        else if (choice == 2) {
+            cout << "\n[Шифрование файла]\n";
+            string inFile = get_existing_file("Введите имя исходного файла (например, plain.txt): ");
+            string outFile = get_new_file("Введите имя для зашифрованного файла (например, cipher.bin): ");
+            
+            ElGamalPublicKey pub = {p, g, y};
+            encryptFileElGamal(inFile, outFile, pub);
+        }
+        else if (choice == 3) {
+            cout << "\n[Дешифрование файла]\n";
+            string inFile = get_existing_file("Введите имя зашифрованного файла (например, cipher.bin): ");
+            string outFile = get_new_file("Введите имя для расшифрованного файла (например, decrypted.txt): ");
+            
+            long long input_x = get_ll("Введите секретный ключ x для расшифровки: ", 1);
+            long long input_p = get_ll("Введите модуль p для расшифровки: ", 2);
+
+            decryptFileElGamal(inFile, outFile, input_x, input_p);
+        }
     }
-    
-    fin.close();
-    fout.close();
-    cout << "Зашифровано байт: " << count << endl;
-    cout << "Размер шифротекста: " << count * 2 * sizeof(long long) << " байт" << endl;
 }
 
-// дешифрование файла
-void decrypt_file(string in_path, string out_path, long long x, long long p) {
-    cout << "\n=== Дешифрование файла ===" << endl;
-    cout << "Вход: " << in_path << endl;
-    cout << "Выход: " << out_path << endl;
-    
-    ifstream fin(in_path, ios::binary);
-    if (!fin) {
-        cout << "ОШИБКА: не могу открыть файл " << in_path << endl;
+void encryptFileElGamal(const string& inputFile, const string& outputFile, ElGamalPublicKey pub) {
+    if (pub.p <= 15) {
+        cout << "Ошибка: Для шифрования любого языка модуль p должен быть строго больше 15!\n";
         return;
     }
+
+    ifstream in(inputFile, ios::binary);
+    ofstream out(outputFile, ios::binary);
     
-    ofstream fout(out_path, ios::binary);
-    if (!fout) {
-        cout << "ОШИБКА: не могу создать файл " << out_path << endl;
+    if (!in.is_open() || !out.is_open()) {
+        cout << "Ошибка открытия файлов.\n";
         return;
     }
-    
-    long long c1, c2;
-    int count = 0;
-    // читаем по две long long за раз
-    while (fin.read((char*)&c1, sizeof(c1)) && fin.read((char*)&c2, sizeof(c2))) {
-        unsigned char bukovka = decrypt_byte(c1, c2, x, p);
-        fout.write((char*)&bukovka, 1);
-        count++;
+
+    cout << "  Классическое шифрование Эль-Гамаля...\n";
+    char raw_byte;
+
+    while (in.get(raw_byte)) {
+        unsigned char byte = static_cast<unsigned char>(raw_byte);
+        
+        // Разделяем 8-битный байт на две половины по 4 бита (значения от 0 до 15)
+        long long m1 = byte >> 4;     // Старшие 4 бита
+        long long m2 = byte & 0x0F;   // Младшие 4 бита
+
+        // Шифруем первую половину байта (m1)
+        long long k1 = 2 + rand() % (pub.p - 3);
+        long long a1 = powerMod(pub.g, k1, pub.p, false);
+        long long y_k1 = powerMod(pub.y, k1, pub.p, false);
+        long long b1 = static_cast<long long>((static_cast<__int128>(m1) * y_k1) % pub.p);
+
+        // Шифруем вторую половину байта (m2)
+        long long k2 = 2 + rand() % (pub.p - 3);
+        long long a2 = powerMod(pub.g, k2, pub.p, false);
+        long long y_k2 = powerMod(pub.y, k2, pub.p, false);
+        long long b2 = static_cast<long long>((static_cast<__int128>(m2) * y_k2) % pub.p);
+
+        // Пишем 4 числа типа long long в файл на каждый 1 байт текста
+        out.write(reinterpret_cast<char*>(&a1), sizeof(a1));
+        out.write(reinterpret_cast<char*>(&b1), sizeof(b1));
+        out.write(reinterpret_cast<char*>(&a2), sizeof(a2));
+        out.write(reinterpret_cast<char*>(&b2), sizeof(b2));
     }
     
-    fin.close();
-    fout.close();
-    cout << "Дешифровано байт: " << count << endl;
+    in.close();
+    out.close();
+    cout << "Файл успешно зашифрован.\n";
+}
+
+void decryptFileElGamal(const string& inputFile, const string& outputFile, long long x, long long p) {
+    ifstream in(inputFile, ios::binary);
+    ofstream out(outputFile, ios::binary);
+    
+    if (!in.is_open() || !out.is_open()) {
+        cout << "Ошибка открытия файлов.\n";
+        return;
+    }
+
+    long long a1, b1, a2, b2;
+    cout << "  Расшифрованный текст: ";
+
+    // Читаем блоки по 4 числа long long
+    while (in.read(reinterpret_cast<char*>(&a1), sizeof(a1)) && in.read(reinterpret_cast<char*>(&b1), sizeof(b1)) &&
+           in.read(reinterpret_cast<char*>(&a2), sizeof(a2)) && in.read(reinterpret_cast<char*>(&b2), sizeof(b2))) {
+        
+        // Восстанавливаем старшие 4 бита
+        long long s1 = powerMod(a1, x, p, false);
+        long long s_inv1 = powerMod(s1, p - 2, p, false); 
+        long long m1 = static_cast<long long>((static_cast<__int128>(b1) * s_inv1) % p);
+
+        // Восстанавливаем младшие 4 бита
+        long long s2 = powerMod(a2, x, p, false);
+        long long s_inv2 = powerMod(s2, p - 2, p, false); 
+        long long m2 = static_cast<long long>((static_cast<__int128>(b2) * s_inv2) % p);
+
+        // Собираем байт обратно из двух половин
+        // Если ключ неверный, значения выйдут за рамки 0-15 и превратятся в случайный мусор
+        unsigned char byte = static_cast<unsigned char>(((m1 & 0x0F) << 4) | (m2 & 0x0F));
+        
+        cout << byte;      
+        out.put(static_cast<char>(byte)); 
+    }
+    cout << "\n";
+    
+    in.close();
+    out.close();
+    cout << "Файл успешно обработан.\n";
 }

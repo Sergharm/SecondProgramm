@@ -1,83 +1,78 @@
 #include "modulo.h"
 #include <iostream>
+#include <utility>
+
 using namespace std;
 
-// проверка на простоту перебором (ну а чё, для лабы хватит)
-bool is_prime(long long chislo) {
-    if (chislo < 2) return false;
-    if (chislo == 2 || chislo == 3) return true;
-    if (chislo % 2 == 0) return false;
-    for (long long i = 3; i * i <= chislo; i += 2) {
-        if (chislo % i == 0) return false;
+bool isPrime(long long n) {
+    if (n <= 1) return false;
+    if (n <= 3) return true;
+    if (n % 2 == 0 || n % 3 == 0) return false;
+    for (long long i = 5; i * i <= n; i += 6) {
+        if (n % i == 0 || n % (i + 2) == 0) return false;
     }
     return true;
 }
 
-// безопасное умножение через __int128
-// без этого переполнение будет при больших числах, препод говорил
-long long safe_mul(long long a, long long b, long long mod) {
-    __int128 aa = a;
-    __int128 bb = b;
-    __int128 res = (aa * bb) % mod;
-    return (long long)res;
+long long gcd(long long a, long long b) {
+    while (b) {
+        a %= b;
+        swap(a, b);
+    }
+    return a;
 }
 
-// бинарное возведение в степень (быстрое, за логарифм)
-long long binary_pow(long long a, long long x, long long m) {
-    cout << "\n=== Бинарное возведение в степень ===" << endl;
-    cout << "Считаем " << a << "^" << x << " mod " << m << endl;
+long long powerMod(long long base, long long exp, long long mod, bool show_log) {
+    long long res = 1;
+    base = base % mod;
     
-    long long result = 1 % m;
-    a = a % m;
-    int step = 1;
-    
-    while (x > 0) {
-        cout << "Шаг " << step << ": x = " << x;
-        
-        // если степень нечётная - умножаем результат на основание
-        if (x % 2 == 1) {
-            result = safe_mul(result, a, m);
-            cout << " (нечётная) -> result = " << result;
-        }
-        
-        // основание в квадрат
-        a = safe_mul(a, a, m);
-        x = x / 2;
-        cout << ", новое a = " << a << endl;
-        step++;
+    if (show_log) {
+        cout << "  [Лог] Возведение " << base << "^" << exp << " mod " << mod << ":\n";
     }
     
-    cout << "Итого результат: " << result << endl;
-    return result;
+    while (exp > 0) {
+        if (exp % 2 == 1) {
+            res = static_cast<long long>((static_cast<__int128>(res) * base) % mod);
+            if (show_log) {
+                cout << "    -> Степень нечетная, текущий res = " << res << "\n";
+            }
+        }
+        base = static_cast<long long>((static_cast<__int128>(base) * base) % mod);
+        exp /= 2;
+        if (show_log) {
+            cout << "    -> Квадрат основания = " << base << ", оставшаяся степень = " << exp << "\n";
+        }
+    }
+    return res;
 }
 
-// возведение в степень через малую теорему ферма
-// работает только если p простое и a не делится на p
-long long fermat_pow(long long a, long long x, long long p) {
-    cout << "\n=== Возведение в степень по теореме Ферма ===" << endl;
-    cout << "Считаем " << a << "^" << x << " mod " << p << endl;
+long long powerModFermat(long long base, long long exp, long long mod, bool show_log) {
+    if (show_log) {
+        cout << "  [Лог Ферма] Проверка условий для " << base << "^" << exp << " mod " << mod << ":\n";
+    }
     
-    // проверка условий теоремы
-    if (!is_prime(p)) {
-        cout << "ОШИБКА: p = " << p << " не простое число!" << endl;
-        cout << "Теорема Ферма тут не работает, извиняйте." << endl;
+    if (!isPrime(mod)) {
+        if (show_log) {
+            cout << "    Ошибка: Модуль " << mod << " не является простым!\n";
+        }
         return -1;
     }
-    cout << "Условие 1 OK: p = " << p << " - простое число" << endl;
     
-    if (a % p == 0) {
-        cout << "Внимание: a делится на p, результат будет 0" << endl;
+    if (base % mod == 0) {
+        if (show_log) {
+            cout << "    -> Основание делится на модуль. Результат: 0\n";
+        }
         return 0;
     }
-    cout << "Условие 2 OK: a = " << a << " и p = " << p << " взаимно просты" << endl;
     
-    // по теореме ферма a^(p-1) = 1 mod p
-    // значит a^x = a^(x mod (p-1)) mod p
-    long long new_x = x % (p - 1);
-    cout << "Сокращаем степень по теореме Ферма:" << endl;
-    cout << "  x mod (p-1) = " << x << " mod " << (p - 1) << " = " << new_x << endl;
-    cout << "Теперь считаем " << a << "^" << new_x << " mod " << p << endl;
+    if (show_log) {
+        cout << "    -> Условия выполнены. Оптимизируем степень.\n";
+    }
     
-    // дальше считаем бинарным методом
-    return binary_pow(a, new_x, p);
+    long long newExp = exp % (mod - 1);
+    if (show_log) {
+        cout << "    -> Новая степень: " << exp << " mod (" << mod << "-1) = " << newExp << "\n";
+    }
+    
+    return powerMod(base, newExp, mod, show_log);
 }

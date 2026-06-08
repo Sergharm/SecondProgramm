@@ -1,80 +1,60 @@
 #include "euclid.h"
 #include <iostream>
+
 using namespace std;
 
-// расширенный алгоритм евклида
-// ищем u, v такие что a*u + b*v = gcd(a,b)
-EuclidResult ext_gcd(long long a, long long b) {
-    cout << "\nРасширенный алгоритм Евклида" << endl;
-    cout << "Ищем u, v для: " << a << "*u + " << b << "*v = gcd(" << a << ", " << b << ")" << endl;
+// Итеративный расширенный алгоритм Евклида с выводом u, v, q
+long long extGCD(long long a, long long b, long long &u, long long &v) {
+    long long u0 = 1, v0 = 0; 
+    long long u1 = 0, v1 = 1; 
     
-    long long old_r = a, r = b;
-    long long old_u = 1, u = 0;
-    long long old_v = 0, v = 1;
-    int iter = 1;
-    
-    cout << "Начальные значения:" << endl;
-    cout << "  r0=" << old_r << ", r1=" << r << endl;
-    cout << "  u0=" << old_u << ", u1=" << u << endl;
-    cout << "  v0=" << old_v << ", v1=" << v << endl;
-    
-    while (r != 0) {
-        long long q = old_r / r;
-        cout << "Итерация " << iter << ":" << endl;
-        cout << "  q = " << old_r << " / " << r << " = " << q << endl;
-        
-        // сохраняем старое r
-        long long tmp_r = r;
-        r = old_r - q * r;
-        old_r = tmp_r;
-        
-        // обновляем u
-        long long tmp_u = u;
-        u = old_u - q * u;
-        old_u = tmp_u;
-        
-        // обновляем v
-        long long tmp_v = v;
-        v = old_v - q * v;
-        old_v = tmp_v;
-        
-        cout << "  Новые значения: r=" << r << ", u=" << u << ", v=" << v << endl;
-        iter++;
+    long long step = 1;
+    cout << "[Начало цикла Евклида]\n";
+
+    while (b != 0) {
+        long long q = a / b; 
+        long long r = a % b; 
+
+        long long next_u = u0 - q * u1;
+        long long next_v = v0 - q * v1;
+
+        // Теперь мы выводим коэффициенты, которые относятся именно к полученному остатку r
+        cout << "    Шаг " << step++ << ": " << a << " / " << b << " = " << q << " (остаток " << r << ")\n";
+        if (r != 0) {
+            cout << "          Коэффициенты для остатка " << r << ": q = " << q 
+                 << ", u = " << next_u << ", v = " << next_v << "\n";
+            cout << "          Проверка шага: " << next_u << "*7 + " << next_v << "*17 = " << r << "\n";
+        } else {
+            cout << "          Остаток 0, деление завершено. НОД найден.\n";
+        }
+
+        a = b;
+        b = r;
+
+        u0 = u1; v0 = v1;
+        u1 = next_u; v1 = next_v;
     }
-    
-    cout << "Результат:" << endl;
-    cout << "  gcd = " << old_r << endl;
-    cout << "  u = " << old_u << endl;
-    cout << "  v = " << old_v << endl;
-    cout << "Проверка: " << a << "*(" << old_u << ") + " << b << "*(" << old_v << ") = " 
-         << a*old_u + b*old_v << endl;
-    
-    EuclidResult res;
-    res.u = old_u;
-    res.v = old_v;
-    res.gcd = old_r;
-    return res;
+
+    u = u0;
+    v = v0;
+
+    return a; 
 }
 
-// поиск обратного элемента по модулю
-// c^(-1) mod m = d, то есть c*d = 1 mod m
-long long mod_inverse(long long c, long long m) {
-    cout << "\n=== Поиск обратного элемента ===" << endl;
-    cout << "Ищем " << c << "^(-1) mod " << m << endl;
+
+// Нахождение обратного числа c^-1 mod m
+long long modInverse(long long c, long long m) {
+    long long u, v;
+    cout << "  [Лог] Поиск обратного для " << c << " mod " << m << ":\n";
+    long long g = extGCD(c, m, u, v);
     
-    EuclidResult res = ext_gcd(c, m);
-    
-    if (res.gcd != 1) {
-        cout << "ОШИБКА: gcd(" << c << ", " << m << ") = " << res.gcd << " != 1" << endl;
-        cout << "Обратного элемента НЕ СУЩЕСТВУЕТ!" << endl;
+    if (g != 1) {
+        cout << "    Ошибка: обратного числа нет, так как НОД = " << g << " (не равен 1)\n";
         return -1;
     }
     
-    // приводим к положительному числу в диапазоне [0, m-1]
-    long long d = (res.u % m + m) % m;
-    cout << "Обратный элемент: " << c << "^(-1) mod " << m << " = " << d << endl;
-    cout << "Проверка: " << c << " * " << d << " mod " << m << " = " 
-         << (c * d) % m << endl;
-    
-    return d;
+    // Переводим отрицательный коэффициент u в положительный остаток по модулю m
+    long long res = (u % m + m) % m;
+    cout << "    -> Обратное число найдено: " << res << "\n";
+    return res;
 }
