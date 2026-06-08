@@ -1,8 +1,10 @@
 #pragma once
 #include <string>
 
+typedef unsigned long long uint;
+
 // Запуск консольного меню
 void showMenu();
 
 // Безопасный ввод чисел с проверкой границ
-long long get_ll(const std::string& prompt, long long min_val = 0, long long max_val = 1000000000000LL);
+uint get_ll(const std::string& podskazka, uint minZnachenie = 0, uint maxZnachenie = 1000000000000ULL);

@@ -3,58 +3,53 @@
 
 using namespace std;
 
-// Итеративный расширенный алгоритм Евклида с выводом u, v, q
-long long extGCD(long long a, long long b, long long &u, long long &v) {
-    long long u0 = 1, v0 = 0; 
-    long long u1 = 0, v1 = 1; 
+uint extGCD(uint a, uint b, int64 &kofU, int64 &kofV) {
+    int64 u0 = 1, v0 = 0; 
+    int64 u1 = 0, v1 = 1; 
     
-    long long step = 1;
+    uint shag = 1;
     cout << "[Начало цикла Евклида]\n";
 
     while (b != 0) {
-        long long q = a / b; 
-        long long r = a % b; 
+        uint chastnoeQ = a / b; 
+        uint ostatokR = a % b; 
 
-        long long next_u = u0 - q * u1;
-        long long next_v = v0 - q * v1;
+        int64 nextU = u0 - (int64)chastnoeQ * u1;  // Приводим к int64
+        int64 nextV = v0 - (int64)chastnoeQ * v1;
 
-        // Теперь мы выводим коэффициенты, которые относятся именно к полученному остатку r
-        cout << "    Шаг " << step++ << ": " << a << " / " << b << " = " << q << " (остаток " << r << ")\n";
-        if (r != 0) {
-            cout << "          Коэффициенты для остатка " << r << ": q = " << q 
-                 << ", u = " << next_u << ", v = " << next_v << "\n";
-            cout << "          Проверка шага: " << next_u << "*7 + " << next_v << "*17 = " << r << "\n";
-        } else {
-            cout << "          Остаток 0, деление завершено. НОД найден.\n";
+        cout << "    Шаг " << shag++ << ": " << a << " / " << b 
+             << " = " << chastnoeQ << " (остаток " << ostatokR << ")\n";
+        if (ostatokR != 0) {
+            cout << "          Коэффициенты для остатка " << ostatokR 
+                 << ": q = " << chastnoeQ 
+                 << ", u = " << nextU << ", v = " << nextV << "\n";
         }
 
         a = b;
-        b = r;
+        b = ostatokR;
 
         u0 = u1; v0 = v1;
-        u1 = next_u; v1 = next_v;
+        u1 = nextU; v1 = nextV;
     }
 
-    u = u0;
-    v = v0;
+    kofU = u0;
+    kofV = v0;
 
     return a; 
 }
 
-
-// Нахождение обратного числа c^-1 mod m
-long long modInverse(long long c, long long m) {
-    long long u, v;
-    cout << "  [Лог] Поиск обратного для " << c << " mod " << m << ":\n";
-    long long g = extGCD(c, m, u, v);
+uint modInverse(uint chisloC, uint modulM) {
+    int64 kofU, kofV;
+    cout << "  [Лог] Поиск обратного для " << chisloC << " mod " << modulM << ":\n";
+    uint nod = extGCD(chisloC, modulM, kofU, kofV);
     
-    if (g != 1) {
-        cout << "    Ошибка: обратного числа нет, так как НОД = " << g << " (не равен 1)\n";
-        return -1;
+    if (nod != 1) {
+        cout << "    Ошибка: обратного числа нет, так как НОД = " << nod << "\n";
+        return (uint)(-1);
     }
     
-    // Переводим отрицательный коэффициент u в положительный остаток по модулю m
-    long long res = (u % m + m) % m;
-    cout << "    -> Обратное число найдено: " << res << "\n";
-    return res;
+    // Приводим отрицательный коэффициент к положительному остатку
+    uint resultat = ((kofU % (int64)modulM) + (int64)modulM) % modulM;
+    cout << "    -> Обратное число найдено: " << resultat << "\n";
+    return resultat;
 }

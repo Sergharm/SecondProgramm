@@ -1,78 +1,78 @@
-#include "modulo.h"
-#include <iostream>
-#include <utility>
+    #include "modulo.h"
+    #include <iostream>
+    #include <utility>
 
-using namespace std;
+    using namespace std;
 
-bool isPrime(long long n) {
-    if (n <= 1) return false;
-    if (n <= 3) return true;
-    if (n % 2 == 0 || n % 3 == 0) return false;
-    for (long long i = 5; i * i <= n; i += 6) {
-        if (n % i == 0 || n % (i + 2) == 0) return false;
+    bool isPrime(uint chisloN) {
+        if (chisloN <= 1) return false;
+        if (chisloN <= 3) return true;
+        if (chisloN % 2 == 0 || chisloN % 3 == 0) return false;
+        for (uint indexI = 5; indexI * indexI <= chisloN; indexI += 6) {
+            if (chisloN % indexI == 0 || chisloN % (indexI + 2) == 0) return false;
+        }
+        return true;
     }
-    return true;
-}
 
-long long gcd(long long a, long long b) {
-    while (b) {
-        a %= b;
-        swap(a, b);
+    uint gcd(uint a, uint b) {
+        while (b) {
+            a %= b;
+            swap(a, b);
+        }
+        return a;
     }
-    return a;
-}
 
-long long powerMod(long long base, long long exp, long long mod, bool show_log) {
-    long long res = 1;
-    base = base % mod;
-    
-    if (show_log) {
-        cout << "  [Лог] Возведение " << base << "^" << exp << " mod " << mod << ":\n";
-    }
-    
-    while (exp > 0) {
-        if (exp % 2 == 1) {
-            res = static_cast<long long>((static_cast<__int128>(res) * base) % mod);
+    uint powerMod(uint baza, uint stepen, uint modul, bool show_log) {
+        uint resultat = 1;
+        baza = baza % modul;
+        
+        if (show_log) {
+            cout << "  [Лог] Возведение " << baza << "^" << stepen << " mod " << modul << ":\n";
+        }
+        
+        while (stepen > 0) {
+            if (stepen % 2 == 1) {
+                resultat = static_cast<uint>((static_cast<__int128>(resultat) * baza) % modul);
+                if (show_log) {
+                    cout << "    -> Степень нечетная, текущий resultat = " << resultat << "\n";
+                }
+            }
+            baza = static_cast<uint>((static_cast<__int128>(baza) * baza) % modul);
+            stepen /= 2;
             if (show_log) {
-                cout << "    -> Степень нечетная, текущий res = " << res << "\n";
+                cout << "    -> Квадрат основания = " << baza << ", оставшаяся степень = " << stepen << "\n";
             }
         }
-        base = static_cast<long long>((static_cast<__int128>(base) * base) % mod);
-        exp /= 2;
-        if (show_log) {
-            cout << "    -> Квадрат основания = " << base << ", оставшаяся степень = " << exp << "\n";
-        }
+        return resultat;
     }
-    return res;
-}
 
-long long powerModFermat(long long base, long long exp, long long mod, bool show_log) {
-    if (show_log) {
-        cout << "  [Лог Ферма] Проверка условий для " << base << "^" << exp << " mod " << mod << ":\n";
-    }
-    
-    if (!isPrime(mod)) {
+    uint powerModFermat(uint baza, uint stepen, uint modul, bool show_log) {
         if (show_log) {
-            cout << "    Ошибка: Модуль " << mod << " не является простым!\n";
+            cout << "  [Лог Ферма] Проверка условий для " << baza << "^" << stepen << " mod " << modul << ":\n";
         }
-        return -1;
-    }
-    
-    if (base % mod == 0) {
+        
+        if (!isPrime(modul)) {
+            if (show_log) {
+                cout << "    Ошибка: Модуль " << modul << " не является простым!\n";
+            }
+            return static_cast<uint>(-1);
+        }
+        
+        if (baza % modul == 0) {
+            if (show_log) {
+                cout << "    -> Основание делится на модуль. Результат: 0\n";
+            }
+            return 0;
+        }
+        
         if (show_log) {
-            cout << "    -> Основание делится на модуль. Результат: 0\n";
+            cout << "    -> Условия выполнены. Оптимизируем степень.\n";
         }
-        return 0;
+        
+        uint novayaStepen = stepen % (modul - 1);
+        if (show_log) {
+            cout << "    -> Новая степень: " << stepen << " mod (" << modul << "-1) = " << novayaStepen << "\n";
+        }
+        
+        return powerMod(baza, novayaStepen, modul, show_log);
     }
-    
-    if (show_log) {
-        cout << "    -> Условия выполнены. Оптимизируем степень.\n";
-    }
-    
-    long long newExp = exp % (mod - 1);
-    if (show_log) {
-        cout << "    -> Новая степень: " << exp << " mod (" << mod << "-1) = " << newExp << "\n";
-    }
-    
-    return powerMod(base, newExp, mod, show_log);
-}

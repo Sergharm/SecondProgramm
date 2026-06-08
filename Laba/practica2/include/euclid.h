@@ -1,7 +1,10 @@
 #pragma once
 
-// Расширенный алгоритм Евклида без рекурсии
-long long extGCD(long long a, long long b, long long &u, long long &v);
+typedef unsigned long long uint;
+typedef long long int64;  // Добавляем знаковый тип
+
+// Расширенный алгоритм Евклида
+uint extGCD(uint a, uint b, int64 &kofU, int64 &kofV);
 
 // Поиск обратного числа по модулю
-long long modInverse(long long c, long long m);
+uint modInverse(uint chisloC, uint modulM);
