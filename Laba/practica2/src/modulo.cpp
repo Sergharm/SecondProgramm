@@ -27,7 +27,7 @@
         baza = baza % modul;
         
         if (show_log) {
-            cout << "  [Лог] Возведение " << baza << "^" << stepen << " mod " << modul << ":\n";
+            cout << "Возведение " << baza << "^" << stepen << " mod " << modul << ":\n";
         }
         
         while (stepen > 0) {
@@ -48,7 +48,7 @@
 
     uint powerModFermat(uint baza, uint stepen, uint modul, bool show_log) {
         if (show_log) {
-            cout << "  [Лог Ферма] Проверка условий для " << baza << "^" << stepen << " mod " << modul << ":\n";
+            cout << "Проверка условий для " << baza << "^" << stepen << " mod " << modul << ":\n";
         }
         
         if (!isPrime(modul)) {

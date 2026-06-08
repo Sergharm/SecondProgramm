@@ -38,7 +38,7 @@ void showMenu() {
         else if (vybor == 2) {
             uint a = get_ll("Введите a: ", 1);
             uint b = get_ll("Введите b: ", 1);
-            int64 kofU, kofV;  // ✅ ИСПРАВЛЕНО
+            int64 kofU, kofV;  // ИСПРАВЛЕНО
             uint nod = extGCD(a, b, kofU, kofV);
             cout << "\nНОД = " << nod << ", u = " << kofU << ", v = " << kofV << "\n";
         } 

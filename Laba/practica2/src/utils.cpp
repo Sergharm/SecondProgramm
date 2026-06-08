@@ -28,7 +28,6 @@ uint get_ll(const string& podskazka, uint minZnachenie, uint maxZnachenie) {
             // буфер чистить не нужно, просто идем на новую итерацию
         } else {
             // Перед успешным возвратом избавляемся от остатков символа '\n' в буфере,
-            // чтобы последующие вызовы ввода (например, строк) не считывали пустую строку.
             string pustishka;
             getline(cin, pustishka); 
             return znachenie;
@@ -41,8 +40,7 @@ string get_str(const string& podskazka) {
     cout << podskazka;
     cin >> s;
     
-    // Вместо жесткого clear_input() аккуратно считываем остаток строки, 
-    // чтобы не блокировать ввод, если буфер уже пуст.
+
     string pustishka;
     getline(cin, pustishka);
     return s;
