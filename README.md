@@ -38,9 +38,13 @@
 Проект организован в виде Git-репозитория с несколькими ветками:
 
 | **main** | Базовая структура проекта 
+
 | **Garmaev_Ciphers** | Affine, Playfair 
+
 | **Saids_Ciphers** | RSA, A5/1, AES128(CFB)
+
 | **Nesterov_Siphers** | Hill, Vernam 
+
 | **Rozhkov_Ciphers** | Bifid, ADFGX 
 
 ---
