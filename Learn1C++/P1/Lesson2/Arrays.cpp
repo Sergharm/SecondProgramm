@@ -1,6 +1,5 @@
 #include <iostream>
 using namespace std;
-
 int main() {
     int summ, now;
     cin >> now;
