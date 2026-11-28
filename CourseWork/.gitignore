@@ -1,0 +1,15 @@
+/build*/
+/reports/*
+!/reports/.gitkeep
+*.log
+*.trace
+*.tmp
+*.swp
+.env
+.env.*
+*.pem
+*.key
+/.aws/
+/.agents/
+/.codex/
+/.vscode/

@@ -1,0 +1,11 @@
+function(embed_test path name)
+    file(READ "${path}" bytes HEX)
+    string(REGEX REPLACE "(..)" "0x\\1, " bytes "${bytes}")
+    string(REGEX REPLACE "([^ ]+ [^ ]+ [^ ]+ [^ ]+ [^ ]+ [^ ]+ [^ ]+ [^ ]+ )" "\\1\n" bytes "${bytes}")
+    file(APPEND "${OUTPUT}" "inline constexpr unsigned char ${name}[] = {\n${bytes}\n};\n")
+endfunction()
+
+file(WRITE "${OUTPUT}" "#pragma once\nnamespace allowed {\n")
+embed_test("${TCP}" tcp)
+embed_test("${UDP}" udp)
+file(APPEND "${OUTPUT}" "}\n")
