@@ -1,0 +1,26 @@
+digraph LinuxSandbox {
+  graph [bgcolor=white, pad=0.16, nodesep=0.65, ranksep=0.33, dpi=260, fontname="DejaVu Sans", fontsize=12, labelloc=t];
+  node [shape=box, color=black, fontcolor=black, fontname="DejaVu Sans", fontsize=11, margin="0.13,0.08"];
+  edge [color=black, fontcolor=black, fontname="DejaVu Sans", fontsize=9, arrowsize=0.65];
+  label="ПОСЛЕДОВАТЕЛЬНОСТЬ ВЫЗОВОВ ПРИ АНАЛИЗЕ";
+  start [group=l, label="1. ConsoleUI::run() → Sandbox::analyze()"];
+  check [group=r, label="2. Sandbox::fileInfo() → verifyFile()"];
+  isolation [group=r, label="3. IsolationManager::command()"];
+  run [group=l, label="4. Sandbox → ProcessManager::run()"];
+  exec [group=l, label="5. Bubblewrap → strace → /sample"];
+  read [group=r, label="6. waitpid() → pread() → ProcessResult"];
+  parse [group=r, label="7. NetworkMonitor::parse() → NetworkTrace"];
+  show [group=l, label="8. Sandbox возвращает Analysis в ConsoleUI"];
+  {rank=same; start; check;}
+  {rank=same; run; isolation;}
+  {rank=same; exec; read;}
+  {rank=same; show; parse;}
+  start -> check;
+  check -> isolation;
+  run -> isolation [dir=back];
+  run -> exec;
+  exec -> read;
+  read -> parse;
+  show -> parse [dir=back];
+  start -> run [style=invis]; isolation -> read [style=invis]; exec -> show [style=invis];
+}

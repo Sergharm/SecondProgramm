@@ -1,0 +1,13 @@
+digraph LinuxSandbox {
+  graph [bgcolor=white, pad=0.16, nodesep=0.34, ranksep=0.38, dpi=260, fontname="DejaVu Sans", fontsize=12, labelloc=t];
+  node [shape=box, color=black, fontcolor=black, fontname="DejaVu Sans", fontsize=11, margin="0.13,0.08"];
+  edge [color=black, fontcolor=black, fontname="DejaVu Sans", fontsize=9, arrowsize=0.65];
+  label="МОНИТОРИНГ СЕТЕВЫХ ВЫЗОВОВ";
+  app [label="test_tcp / test_udp\nОперации с сокетами IPv4"];
+  trace [label="strace -f -yy -e trace=%network\nВызовы, аргументы, коды возврата"];
+  stream [label="ProcessManager\nЧтение до 128 КиБ после завершения"];
+  regex [label="NetworkMonitor\nРазбор строк и таблица PID:FD → протокол"];
+  event [label="Event · PID, вызов, протокол, IP, порт, результат"];
+  diag [label="Диагностика\nНераспознанные строки"];
+  app -> trace -> stream -> regex; regex -> {event diag};
+}

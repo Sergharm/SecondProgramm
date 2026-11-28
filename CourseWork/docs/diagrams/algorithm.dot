@@ -1,0 +1,17 @@
+digraph LinuxSandbox {
+  graph [bgcolor=white, pad=0.16, nodesep=0.34, ranksep=0.38, dpi=260, fontname="DejaVu Sans", fontsize=12, labelloc=t];
+  node [shape=box, color=black, fontcolor=black, fontname="DejaVu Sans", fontsize=11, margin="0.13,0.08"];
+  edge [color=black, fontcolor=black, fontname="DejaVu Sans", fontsize=9, arrowsize=0.65];
+  label="АЛГОРИТМ СЕТЕВОГО АНАЛИЗА";
+  start [shape=ellipse,label="Команда 3"];
+  file [label="Прочитать свойства выбранного файла"];
+  valid [shape=diamond,label="Разрешён путь,\nбит исполнения и байты?"];
+  refuse [label="Записать отказ и вывести статус"];
+  prepare [label="Подготовить аргументы Bubblewrap,\nбайты образца и выходной memfd"];
+  run [label="Запустить Bubblewrap; ждать до 5 секунд"];
+  timeout [shape=diamond,label="Время истекло?"];
+  stop [label="SIGKILL и waitpid"];
+  parse [label="Разобрать трассу и диагностику;\nвыбрать статус по коду и событиям"];
+  end [shape=ellipse,label="Результат в памяти и журнале"];
+  start -> file -> valid; valid -> prepare [label="да"]; valid -> refuse [label="нет"]; prepare -> refuse [style=dashed,label="ошибка"]; prepare -> run -> timeout; timeout -> stop [label="да"]; timeout -> parse [label="нет"]; stop -> parse; parse -> end; refuse -> end;
+}

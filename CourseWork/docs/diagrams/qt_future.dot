@@ -1,0 +1,13 @@
+digraph LinuxSandbox {
+  graph [bgcolor=white, pad=0.16, nodesep=0.34, ranksep=0.38, dpi=260, fontname="DejaVu Sans", fontsize=12, labelloc=t];
+  node [shape=box, color=black, fontcolor=black, fontname="DejaVu Sans", fontsize=11, margin="0.13,0.08"];
+  edge [color=black, fontcolor=black, fontname="DejaVu Sans", fontsize=9, arrowsize=0.65];
+  label="ПРОЕКТНАЯ АРХИТЕКТУРА Qt 6 WIDGETS";
+  window [label="Перспективное окно Qt 6 Widgets\nВыбор образца, события и журнал"];
+  control [label="Перспективный контроллер анализа"];
+  worker [label="Перспективный рабочий поток\nРезультат через сигналы Qt"];
+  core [label="Ядро Sandbox\nПрикладные данные без зависимости от Qt"];
+  existing [label="Существующий ConsoleUI"];
+  graphing [label="Перспектива\nДерево процессов и экспорт JSON"];
+  window -> control -> worker -> core; existing -> core; worker -> window [label="данные",constraint=false]; core -> graphing [style=dashed];
+}

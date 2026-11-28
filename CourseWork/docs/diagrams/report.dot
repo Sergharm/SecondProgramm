@@ -1,0 +1,13 @@
+digraph LinuxSandbox {
+  graph [bgcolor=white, pad=0.16, nodesep=0.34, ranksep=0.38, dpi=260, fontname="DejaVu Sans", fontsize=12, labelloc=t];
+  node [shape=box, color=black, fontcolor=black, fontname="DejaVu Sans", fontsize=11, margin="0.13,0.08"];
+  edge [color=black, fontcolor=black, fontname="DejaVu Sans", fontsize=9, arrowsize=0.65];
+  label="ФОРМИРОВАНИЕ ТЕКСТОВОГО ОТЧЁТА";
+  ui [label="ConsoleUI · команда 6"];
+  core [label="Sandbox::saveReport()"];
+  last [label="Analysis\nСтатус и сетевые события"];
+  log [label="Журнал сеанса\nЗаписи к моменту сохранения"];
+  mgr [label="ReportManager::save()\nУникальное имя · запись с проверкой ошибок"];
+  txt [label="reports/analysis-XXXXXX.txt\nПрава 0600"];
+  ui -> core; {last log} -> core; core -> mgr -> txt; mgr -> ui [label="относительный путь",constraint=false];
+}

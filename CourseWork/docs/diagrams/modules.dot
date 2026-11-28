@@ -1,0 +1,28 @@
+digraph LinuxSandbox {
+  graph [layout=neato, splines=line, bgcolor=white, pad=0.12, dpi=260];
+  node [shape=box, color=black, fontcolor=black, fontname="DejaVu Sans", fontsize=10.5, margin="0.08,0.06"];
+  edge [color=black, arrowsize=0.68];
+  heading [shape=plaintext, fontsize=11.5, label="СХЕМА ВЗАИМОДЕЙСТВИЯ ПРОГРАММНЫХ МОДУЛЕЙ", pos="274,327!"];
+  level1 [shape=plaintext, label="Уровень 1\nПользовательский\nинтерфейс", pos="49,276!"];
+  level2 [shape=plaintext, label="Уровень 2\nПрикладная\nлогика", pos="49,207!"];
+  level3 [shape=plaintext, label="Уровень 3\nЗапуск и\nнаблюдение", pos="49,136!"];
+  level4 [shape=plaintext, label="Уровень 4\nСредства Linux\nи зависимости", pos="49,65!"];
+
+  main [label="main.cpp\nТочка входа", pos="176,276!"];
+  ui [label="ConsoleUI.cpp\nКоманды и вывод", pos="323,276!"];
+  core [label="Sandbox.cpp\nФайл, анализ, журнал", pos="323,207!"];
+  report [label="ReportManager.cpp\nЗапись TXT 0600", pos="474,207!"];
+  iso [label="IsolationManager.cpp\nАргументы изоляции", pos="176,136!"];
+  process [label="ProcessManager.cpp\nЗапуск, лимит, трасса", pos="323,136!"];
+  monitor [label="NetworkMonitor.cpp\nРазбор сетевых вызовов", pos="474,136!"];
+  bw [label="Bubblewrap\nПространства имён", pos="176,65!"];
+  strace [label="strace\nСетевая трасса", pos="323,65!"];
+  sample [label="test_tcp.cpp / test_udp.cpp\nОбмен на loopback", pos="474,65!"];
+
+  main -> ui;
+  ui -> core;
+  core -> report;
+  core -> {iso process monitor};
+  process -> bw;
+  bw -> strace -> sample;
+}

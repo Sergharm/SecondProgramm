@@ -1,0 +1,17 @@
+digraph LinuxSandbox {
+  graph [bgcolor=white, pad=0.16, nodesep=0.34, ranksep=0.38, dpi=260, fontname="DejaVu Sans", fontsize=12, labelloc=t];
+  node [shape=box, color=black, fontcolor=black, fontname="DejaVu Sans", fontsize=11, margin="0.13,0.08"];
+  edge [color=black, fontcolor=black, fontname="DejaVu Sans", fontsize=9, arrowsize=0.65];
+  label="ГРАНИЦА ИЗОЛЯЦИИ ОБРАЗЦА";
+  host [label="Обычный пользователь\nLinuxSandbox / ProcessManager"];
+  sample [label="Проверенные встроенные байты\nmemfd → дескриптор 3"];
+  out [label="Дескриптор 2 → выходной memfd"];
+  subgraph cluster_boundary {label="Среда Bubblewrap · ядро Linux общее";
+    st [label="strace внутри новых пространств имён"];
+    exe [label="/sample · копия только для чтения"];
+    lib [label="/usr/lib, /usr/lib64 (если есть) · чтение\nприватные /proc и /dev"];
+    loop [label="Сеть: только loopback тестов\n127.0.0.1 · порт назначает ядро"];
+    st -> exe; exe -> {lib loop};
+  }
+  host -> sample -> exe; host -> st [label="Bubblewrap"]; st -> out [label="трасса"];
+}

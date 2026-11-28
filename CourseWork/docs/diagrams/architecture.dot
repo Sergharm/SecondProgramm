@@ -1,0 +1,14 @@
+digraph LinuxSandbox {
+  graph [bgcolor=white, pad=0.16, nodesep=0.34, ranksep=0.38, dpi=260, fontname="DejaVu Sans", fontsize=12, labelloc=t];
+  node [shape=box, color=black, fontcolor=black, fontname="DejaVu Sans", fontsize=11, margin="0.13,0.08"];
+  edge [color=black, fontcolor=black, fontname="DejaVu Sans", fontsize=9, arrowsize=0.65];
+  label="АРХИТЕКТУРА LINUXSANDBOX v0.1";
+  user [label="Оператор\nВвод и просмотр"];
+  cli [label="Консольный интерфейс\nConsoleUI"];
+  core [label="Прикладное ядро\nSandbox"];
+  tests [label="CMake: байты тестов\nAllowedTests.h"];
+  exec [label="Изолированное исполнение\nBubblewrap → strace → образец"];
+  format [label="Обработка результата\nAnalysis, Event и журнал"];
+  save [label="ReportManager → TXT"];
+  user -> cli -> core; tests -> core; core -> exec [label="проверенные байты"]; exec -> format [label="трасса и код"]; core -> format [style=dashed]; format -> cli [label="данные для вывода",constraint=false]; format -> save;
+}

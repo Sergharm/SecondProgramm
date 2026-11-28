@@ -1,0 +1,20 @@
+digraph LinuxSandbox {
+  graph [bgcolor=white, pad=0.16, nodesep=0.34, ranksep=0.38, dpi=260, fontname="DejaVu Sans", fontsize=12, labelloc=t];
+  node [shape=box, color=black, fontcolor=black, fontname="DejaVu Sans", fontsize=11, margin="0.13,0.08"];
+  edge [color=black, fontcolor=black, fontname="DejaVu Sans", fontsize=9, arrowsize=0.65];
+  label="КЛАССЫ И СТРУКТУРЫ LINUXSANDBOX v0.1";
+  ui [label="ConsoleUI\n− sandbox_: Sandbox&\n+ run(): void"];
+  core [label="Sandbox\n− selected_, lastAnalysis_, journal_\n+ select(), fileInfo(), analyze(), saveReport()"];
+  files [label="FileInfo\npath, size, executable, type"];
+  analysis [label="Analysis\nstatus, events, diagnostics"];
+  event [label="Event\npid, call, protocol, address,\nport, result, success"];
+  p [label="ProcessManager\n+ run(): ProcessResult"];
+  i [label="IsolationManager\n+ command(): vector<string>"];
+  n [label="NetworkMonitor\n+ parse(): NetworkTrace"];
+  r [label="ReportManager\n+ save(): path"];
+  fd [label="FileDescriptor\n− fd_: int\n+ get(): int, ~FileDescriptor()"];
+  pr [label="ProcessResult\nexitCode, timedOut, output"];
+  nt [label="NetworkTrace\nevents, diagnostics"];
+  ui -> core [style=dashed,label="ссылка"]; core -> files [style=dashed]; core -> analysis [label="optional"]; analysis -> event [label="0..*"];
+  core -> {p i n r} [dir=both,arrowtail=diamond,arrowhead=none]; p -> pr [style=dashed]; n -> nt [style=dashed]; nt -> event [label="0..*"]; p -> fd [style=dashed]; r -> fd [style=dashed];
+}

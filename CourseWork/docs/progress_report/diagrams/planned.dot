@@ -1,0 +1,22 @@
+digraph LinuxSandbox {
+  graph [layout=neato, splines=line, bgcolor=white, pad=0.1, dpi=260];
+  node [shape=box, color=black, fontcolor=black, fontname="DejaVu Sans", fontsize=12.5, margin="0.09,0.06"];
+  edge [color=black, fontname="DejaVu Sans", fontsize=10.5, arrowsize=0.7];
+  title [shape=plaintext,label="ПЛАНИРУЕМАЯ АРХИТЕКТУРА",pos="310,572!"];
+  gui [label="Qt 6 Widgets\nГрафический интерфейс при согласовании",pos="310,511!"];
+  core [label="Управляющий модуль\nКоординация сеанса анализа",pos="310,436!"];
+  file [label="Проверка файлов\nСвойства и условия допуска",pos="86,353!"];
+  iso [label="Модуль изоляции\nПодготовка ограничений",pos="303,353!"];
+  proc [label="Управление процессами\nЗапуск, ожидание,\nзавершение",pos="528,353!"];
+  net [label="Мониторинг сетевой активности\nОбработка сетевых вызовов",pos="120,244!"];
+  fs [label="Мониторинг файловых операций\nРегистрация согласованных операций",pos="505,244!"];
+  events [label="Модуль обработки событий\nСвязь событий с процессами",pos="310,163!"];
+  reports [label="Формирование отчётов\nТекстовый отчёт и планируемый JSON",pos="310,88!"];
+  core -> {file iso proc};
+  gui -> core [label=" команды пользователя"];
+  iso -> proc;
+  proc -> {net fs};
+  net -> events;
+  fs -> events;
+  events -> reports [label=" данные анализа"];
+}
